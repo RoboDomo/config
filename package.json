@@ -1,0 +1,50 @@
+{
+  "name": "config-microservice",
+  "version": "1.0.0",
+  "description": "Global Config for RoboDomo (client and microservices)",
+  "main": "index.js",
+  "repository": "git@github.com:RoboDomo/config",
+  "author": "Michael Schwartz <mykesx@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "./node_modules/.bin/forever index.js"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^2.3.0",
+    "lint-staged": "^8.1.7",
+    "prettier": "^1.17.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "plugin:prettier/recommended",
+      "prettier/babel",
+      "prettier/react"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run autoformat"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx},!src/models": [
+      "eslint --fix",
+      "git add"
+    ],
+    "src/**/*.{json,scss,sass,less}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "forever": "^1.0.0",
+    "microservice-core": "https://github.com/RoboDomo/microservice-core",
+    "mongodb": "^3.2.7"
+  }
+}
