@@ -42,20 +42,21 @@ class ConfigHost extends HostBase {
 const main = async () => {
   config._id = "config";
   const configs = {};
-  console.log("connecting to ", url);
+  debug("connecting to ", url);
   MongoClient.connect(url, { useNewUrlParser: true }, async function(
     err,
     database
   ) {
+    debug("Connected");
     await database
       .db("settings")
       .collection("config")
       .replaceOne(config, config, { upsert: true });
-    //    console.log("find", await database.db("config").find());
     configs["config"] = new ConfigHost(config);
-    //    MongoClient.close();
   });
-  fs.watch("./Config.js", (eventType, filename) => {
+
+  // if a file in this director is changed on disk, exit/restart (forever)
+  fs.watch("./", (eventType, filename) => {
     debug("eventType", eventType, "filename", filename);
     debug("restarting");
     process.exit(0);
