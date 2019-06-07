@@ -1,19 +1,6 @@
 process.env.DEBUG = "config";
 process.title = "config-microservice";
 
-/**
- * handler for unhandled rejected promises.  This should never really get called, but we might expect some
- * node_module we depend on to be poorly written.
- */
-process.on("unhandledRejection", function(reason, p) {
-  console.log(
-    "Possibly Unhandled Rejection at: Promise ",
-    p,
-    " reason: ",
-    reason
-  );
-});
-
 if (!process.env.ROBODOMO_MONGODB) {
   throw new Error("ENV ROBODOMO_MONGODB not set");
 }
@@ -34,6 +21,8 @@ class ConfigHost extends HostBase {
   constructor(config) {
     super(host, topic);
     this.config = config;
+    this.state = config;
+    //    console.log("state", this.state);
     this.state = { config: config };
   }
   async command() {}
@@ -51,7 +40,7 @@ const main = async () => {
     await database
       .db("settings")
       .collection("config")
-      .replaceOne(config, config, { upsert: true });
+      .replaceOne({ _id: "config" }, config, { upsert: true });
     configs["config"] = new ConfigHost(config);
   });
 

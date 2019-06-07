@@ -36,6 +36,12 @@ const braviaFavorites = [
   "cbs"
 ];
 
+// favorite channels for TiVo
+const tivoFavorites = [
+  { name: "COOKING", channel: "0663" },
+  { name: "FOOD", channel: "0664" }
+];
+
 export default {
   name: "RoboDomo Home Automation System",
   version: "1.0.0",
@@ -91,6 +97,7 @@ export default {
           // example config for a TiVo DVR or set top box (TiVo Mini, etc.)
           name: "TiVo", // name your TiVo, displayed in the UI
           type: "tivo", // type of device = tivo
+          favorites: tivoFavorites, // favorite channels
           device: "tivo-bolt-3tb", // this is the hostname or IP of your TiVo
           guide: "SchedulesDirect GUIDE ID", // each TiVo might be connected to a different cable provider so you set the guide id here.
         },
@@ -135,7 +142,7 @@ export default {
         {
           name: "TV", // name of activity to be displayed in teh UI
           defaultDevice: "TiVo",// this is the device control that will be displayed in the UI by default for this activity
-          // the inputs for this activity... if tv is hdmi1 and avr is TV, then RoboDomo knows your watching TV.
+          // The inputs for this activity... if tv is hdmi1 and avr is TV, then RoboDomo knows your watching TV.
           inputs: {
             tv: "hdmi1",
             avr: "TV"
@@ -282,7 +289,7 @@ export default {
     {
       title: "Theater", // name of dashboard to be displayed in the UI
       key: "theater", // unique key to identify the dashboard tab
-      // these are the tiles for the dashboard
+      // These are the tiles for the dashboard
       tiles: [
         // a large 256x256 tile that renders the current date/time (with seconds) and sunrise/sunset
         { type: "clock" },
@@ -363,7 +370,7 @@ export default {
     device: "autelis", // host or IP address
     name: "Pool Control",
     location: "zip-code",// location for weather display
-    // the forward and backward hash maps define the relationship between
+    // The forward and backward hash maps define the relationship between
     // Autelis device names and ones we want to use/display.
     // For example, on my pool hardware, autelis aux1 controls the spa jets;
     // we want to use "jets" in our logic, not aux1.
@@ -413,7 +420,7 @@ export default {
   },
   */
   // Nest devices
-  // the name fields must match the names you chose in the Nest app.
+  // The name fields must match the names you chose in the Nest app.
   /*
   nest: {
     // one or more thermostats
@@ -583,6 +590,7 @@ export default {
   /*
   tivo: {
     guide: "SchedulesDirect Guide ID",
+    favorites: tivoFavorites, // favorite channels
     // array of set top boxes
     boxes: [
       // device may optionally have a denon receiver device and a guide
@@ -605,14 +613,7 @@ export default {
     ],
   },
   */
-  // favorite channels for TiVo
-  /*
-  tivoFavorites: [
-    { name: "COOKING", channel: "0663" },
-    { name: "FOOD", channel: "0664" }
-  ],
-  */
-  // the Denon AVRs in your home/office
+  // The Denon AVRs in your home/office
   /*
   denon: {
     receivers: [
@@ -621,37 +622,72 @@ export default {
     ]
   },
   */
-  // the LG TVs in your home/office
+  // The LG TVs in your home/office
+  // Wake on Lan is used to wake up the TV, so the mac address is required.
   /*
   lgtv: {
     tvs: [
       {
         name: "Family Room TV",// name to display in the UI
         device: "lgtv",// hostname or IP
+        mac: "00:00:00:00:00:00", // mac address of your LGTV
         denon: "denon-avr",// hostname or IP of Denon AVR
         favorites: lgtvFavorites// favorite apps for the TV
       }
     ]
   },
   */
-  // the Sony/Bravia TVs in your home/office
+  // The Sony/Bravia TVs in your home/office
+  // Wake on Lan is used to wake up the TV, so the mac address is required.
   /*
   bravia: {
     tvs: [
-      { name: "Bedroom TV", device: "sony-tv", favorites: braviaFavorites },
+      { 
+        name: "Bedroom TV", 
+        device: "sony-tv", 
+        favorites: braviaFavorites,
+        mac: "00:00:00:00:00:00", // mac address of your TV
+      },
     ]
   },
   */
-  // the Logitech Harmony remote Hubs in your home/office
+  // The Logitech Harmony remote Hubs in your home/office
   /*
   harmony: {
     hubs: [
       {
         name: "Family Room",
         device: "harmony-hub",
+        ip: "x.x.x.x", // ip address of your hub
+        mac: "xx:xx:xx:xx:xx:xx", // mac address of your hub
         denon: "denon-avr",
       }
     ]
   }
   */
+  // The Apple TVs in your home/office
+  // Instructions for finding your device's credentials can be found in the appletv-microservice
+  // repository.
+  //
+  // The serial number can be found in settings->general->about on your Apple TV.
+  /*
+  appletv: {
+    devices: [
+      {
+        name: "Family Room Apple TV",
+        device: "appletv",
+        serial: "C0xxxxxxxxx",
+        credentials:
+          "A very long string of random looking characters that you get by pairing with the Apple Tv"
+      },
+      {
+        name: "Bedroom Apple TV",
+        device: "appletv2",
+        serial: "C0xxxxxxxx",
+        credentials:
+          "A very long string of random looking characters that you get by pairing with the Apple Tv"
+      }
+    ]
+  }
+*/
 };
