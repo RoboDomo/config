@@ -369,7 +369,14 @@ export default {
   autelis: {
     device: "autelis", // host or IP address
     name: "Pool Control",
+    url: "http://poolcontrol", where the http page is
     location: "zip-code",// location for weather display
+    // credentials to log in to the pool control HTTP UI.
+    credentials: {
+      // These are the defaults and will work unless you've changed them via the http UI.
+      username: "admin",
+      password: "admin",
+    },
     // The forward and backward hash maps define the relationship between
     // Autelis device names and ones we want to use/display.
     // For example, on my pool hardware, autelis aux1 controls the spa jets;
