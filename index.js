@@ -13,6 +13,10 @@ const fs = require("fs"),
   MACROS_SAMPLE = "./Macros.sample.js";
 
 const defaults = () => {
+  try {
+    fs.mkdir("./config");
+  }
+  catch (e) {}
   if (!fs.existsSync(CONFIG)) {
     console.log("Creating", CONFIG, "from", CONFIG_SAMPLE);
     fs.copyFileSync(CONFIG_SAMPLE, CONFIG);
