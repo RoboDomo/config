@@ -6,13 +6,29 @@ if (!process.env.ROBODOMO_MONGODB) {
 }
 
 const fs = require("fs"),
-  debug = require("debug")("config");
+  debug = require("debug")("config"),
+  CONFIG = "./config/Config.js",
+  CONFIG_SAMPLE = "./Config.sample.js",
+  MACROS = "./config/Macros.js",
+  MACROS_SAMPLE = "./Macros.sample.js";
+
+const defaults = () => {
+  if (!fs.existsSync(CONFIG)) {
+    console.log("Creating", CONFIG, "from", CONFIG_SAMPLE);
+    fs.copyFileSync(CONFIG_SAMPLE, CONFIG);
+  }
+  if (!fs.existsSync(MACROS)) {
+    console.log("Creating", MACROS, "from", MACROS_SAMPLE);
+    fs.copyFileSync(MACROS_SAMPLE, MACROS);
+  }
+};
+defaults();
 
 const MongoClient = require("mongodb").MongoClient,
-  url = process.env.ROBODOMO_MONGODB;
+  url = process.env.ROBODOMO_MONGODB,
 
-const config = require("./Config.js"),
-  macros = require("./macros.js");
+const config = require(CONFIG),
+  macros = require(MACROS);
 
 const HostBase = require("microservice-core/HostBase");
 
@@ -51,11 +67,29 @@ const main = async () => {
     configs["config"] = new ConfigHost(config);
   });
 
-  // if a file in this director is changed on disk, exit/restart (forever)
-  fs.watch("./", (eventType, filename) => {
+  if (process.env.NODE_ENV !== "production") {
+    // in dev, watch index.js for changes
+    fs.watch("./index.js", (eventType, filename) => {
+      debug("eventType", eventType, "filename", filename);
+      debug("restarting");
+      process.exit(0);
+    });
+  }
+
+  // if the Config.js file is changed, restart
+  fs.watch(CONFIG, (eventType, filename) => {
+    debug("eventType", eventType, "filename", filename);
+    debug("restarting");
+    process.exit(0);
+  });
+
+  // if the macros.js file is changed, restart
+  fs.watch(MACROS, (eventType, filename) => {
     debug("eventType", eventType, "filename", filename);
     debug("restarting");
     process.exit(0);
   });
 };
+
+//
 main();
