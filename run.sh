@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 docker run \
-    --net=host \
-    -v $PWD:/home/app \
+    -v $PWD/container-config:/home/app/config \
     -v /home/app/node_modules \
-    -v /var/run/dbus:/var/run/dbus \
+    -e HOST_UID=`id -u` \
+    -e HOST_GID=`id -g` \
     -d \
     --rm \
     --name="config-microservice" \

@@ -2,10 +2,10 @@
 
 # run container without making it a daemon - useful to see logging output
 docker run \
-    --net=host \
     -v $PWD:/home/app \
     -v /home/app/node_modules \
-    -v $PWD/avahi-daemon.conf:/etc/avahi/avahi-daemon.conf \
+    -e HOST_UID=`id -u` \
+    -e HOST_GID=`id -g` \
     --rm \
     --name="config-microservice" \
     robodomo/config-microservice

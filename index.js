@@ -1,10 +1,6 @@
 process.env.DEBUG = "config";
 process.title = "config-microservice";
 
-if (!process.env.ROBODOMO_MONGODB) {
-  throw new Error("ENV ROBODOMO_MONGODB not set");
-}
-
 const fs = require("fs"),
   debug = require("debug")("config"),
   CONFIG = "./config/Config.js",
@@ -13,26 +9,40 @@ const fs = require("fs"),
   MACROS_SAMPLE = "./Macros.sample.js";
 
 const defaults = () => {
-  try {
-    fs.mkdir("./config");
+  const UID = process.env.HOST_UID,
+    GID = process.env.HOST_GID;
+
+  if (!fs.existsSync("config")) {
+    console.log("Making config directory");
+    try {
+      fs.mkdirSync("config");
+      fs.chownSync("config", UID, GID);
+    } catch (e) {
+      console.log("Failed to mkdir config", e.message);
+    }
   }
-  catch (e) {}
   if (!fs.existsSync(CONFIG)) {
     console.log("Creating", CONFIG, "from", CONFIG_SAMPLE);
     fs.copyFileSync(CONFIG_SAMPLE, CONFIG);
+    fs.chownSync(CONFIG, UID, GID);
+  } else {
+    console.log("Using exstinging ", CONFIG);
   }
   if (!fs.existsSync(MACROS)) {
     console.log("Creating", MACROS, "from", MACROS_SAMPLE);
     fs.copyFileSync(MACROS_SAMPLE, MACROS);
+    fs.chownSync(MACROS, UID, GID);
+  } else {
+    console.log("Using exstinging ", MACROS);
   }
 };
 defaults();
 
-const MongoClient = require("mongodb").MongoClient,
-  url = process.env.ROBODOMO_MONGODB,
-
 const config = require(CONFIG),
   macros = require(MACROS);
+
+const MongoClient = require("mongodb").MongoClient,
+  url = process.env.ROBODOMO_MONGODB || "mongodb://robodomo:27017";
 
 const HostBase = require("microservice-core/HostBase");
 
@@ -59,6 +69,9 @@ const main = async () => {
     err,
     database
   ) {
+    if (err) {
+      console.log("connect failed", err);
+    }
     debug("Connected");
     await database
       .db("settings")

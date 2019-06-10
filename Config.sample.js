@@ -42,7 +42,7 @@ const tivoFavorites = [
   { name: "FOOD", channel: "0664" }
 ];
 
-export default {
+module.exports = {
   name: "RoboDomo Home Automation System",
   version: "1.0.0",
 

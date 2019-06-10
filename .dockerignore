@@ -2,3 +2,7 @@
 **/Config.js
 **/Macros.js
 **/node_modules
+**/container-config
+**/Dockerfile
+**/*.sh
+**/*.lock
