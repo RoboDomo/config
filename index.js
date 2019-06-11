@@ -1,5 +1,5 @@
 process.env.DEBUG = "config";
-process.title = "config-microservice";
+process.title = process.env.TITLE || "config-microservice";
 
 const fs = require("fs"),
   debug = require("debug")("config"),
