@@ -68,6 +68,7 @@ module.exports = {
     smartthings: "smartthings",
     macros: "macros"
   },
+  metric: false, // set to true to have the client/app render temps as C and speeds as km/h, etc.
   // Home Theater Definitions
   // This is an array of objects that describe your theaters.  You might have a theater where you mainly watch TV,
   // another in your home office, another in your bedroom, another in a second bedroom, etc.  RoboDomo can control
