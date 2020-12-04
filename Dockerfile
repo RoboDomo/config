@@ -6,5 +6,4 @@ ENV HOME=/home/app
 WORKDIR /home/app
 COPY . /home/app
 RUN cd $HOME && yarn install 
-RUN ls -l
 CMD ["yarn", "start"]

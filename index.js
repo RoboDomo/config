@@ -42,11 +42,11 @@ const config = require(CONFIG),
   macros = require(MACROS);
 
 const MongoClient = require("mongodb").MongoClient,
-  url = process.env.ROBODOMO_MONGODB || "mongodb://robodomo:27017";
+  url = process.env.ROBODOMO_MONGODB || "mongodb://mongodb:27017";
 
 const HostBase = require("microservice-core/HostBase");
 
-const host = process.env.MQTT_HOST || "mqtt://robodomo",
+const host = process.env.MQTT_HOST || "mqtt://mqtt",
   topic = process.env.MQTT_TOPIC || "settings";
 
 class ConfigHost extends HostBase {
